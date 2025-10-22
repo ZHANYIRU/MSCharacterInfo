@@ -128,88 +128,99 @@ export const CharacterSymbol: React.FC<CharacterSymbolProps> = ({
                           {(parseInt(symbol.symbol_str) > 0 ||
                             parseInt(symbol.symbol_dex) > 0 ||
                             parseInt(symbol.symbol_int) > 0 ||
-                            parseInt(symbol.symbol_luk) > 0) && (
-                            <div className="border-t border-slate-600 pt-1 mt-2">
-                              {parseInt(symbol.symbol_str) > 0 && (
-                                <div className="flex justify-between">
-                                  <span className="text-muted-foreground">
-                                    STR
-                                  </span>
-                                  <span className="text-red-300">
-                                    +{formatNumber(symbol.symbol_str)}
-                                  </span>
-                                </div>
-                              )}
-                              {parseInt(symbol.symbol_dex) > 0 && (
-                                <div className="flex justify-between">
-                                  <span className="text-muted-foreground">
-                                    DEX
-                                  </span>
-                                  <span className="text-green-300">
-                                    +{formatNumber(symbol.symbol_dex)}
-                                  </span>
-                                </div>
-                              )}
-                              {parseInt(symbol.symbol_int) > 0 && (
-                                <div className="flex justify-between">
-                                  <span className="text-muted-foreground">
-                                    INT
-                                  </span>
-                                  <span className="text-blue-300">
-                                    +{formatNumber(symbol.symbol_int)}
-                                  </span>
-                                </div>
-                              )}
-                              {parseInt(symbol.symbol_luk) > 0 && (
-                                <div className="flex justify-between">
-                                  <span className="text-muted-foreground">
-                                    LUK
-                                  </span>
-                                  <span className="text-yellow-300">
-                                    +{formatNumber(symbol.symbol_luk)}
-                                  </span>
-                                </div>
-                              )}
-                            </div>
-                          )}
+                            parseInt(symbol.symbol_luk) > 0 ||
+                            parseInt(symbol.symbol_hp) > 0) && (
+                              <div className="border-t border-slate-600 pt-1 mt-2">
+                                {parseInt(symbol.symbol_str) > 0 && (
+                                  <div className="flex justify-between">
+                                    <span className="text-muted-foreground">
+                                      STR
+                                    </span>
+                                    <span className="text-red-300">
+                                      +{formatNumber(symbol.symbol_str)}
+                                    </span>
+                                  </div>
+                                )}
+                                {parseInt(symbol.symbol_dex) > 0 && (
+                                  <div className="flex justify-between">
+                                    <span className="text-muted-foreground">
+                                      DEX
+                                    </span>
+                                    <span className="text-green-300">
+                                      +{formatNumber(symbol.symbol_dex)}
+                                    </span>
+                                  </div>
+                                )}
+                                {parseInt(symbol.symbol_int) > 0 && (
+                                  <div className="flex justify-between">
+                                    <span className="text-muted-foreground">
+                                      INT
+                                    </span>
+                                    <span className="text-blue-300">
+                                      +{formatNumber(symbol.symbol_int)}
+                                    </span>
+                                  </div>
+                                )}
+                                {parseInt(symbol.symbol_luk) > 0 && (
+                                  <div className="flex justify-between">
+                                    <span className="text-muted-foreground">
+                                      LUK
+                                    </span>
+                                    <span className="text-yellow-300">
+                                      +{formatNumber(symbol.symbol_luk)}
+                                    </span>
+                                  </div>
+                                )}
+                                {parseInt(symbol.symbol_hp) > 0 && (
+                                  <div className="flex justify-between">
+                                    <span className="text-muted-foreground">
+                                      HP
+                                    </span>
+                                    <span className="text-pink-300">
+                                      +{formatNumber(symbol.symbol_hp)}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                            )}
 
                           {/* 特殊效果 */}
                           {(symbol.symbol_drop_rate !== "0%" ||
                             symbol.symbol_meso_rate !== "0%" ||
                             symbol.symbol_exp_rate !== "0%") && (
-                            <div className="border-t border-slate-600 pt-1 mt-2">
-                              {symbol.symbol_drop_rate !== "0%" && (
-                                <div className="flex justify-between">
-                                  <span className="text-muted-foreground">
-                                    掉落率
-                                  </span>
-                                  <span className="text-purple-300">
-                                    +{symbol.symbol_drop_rate}
-                                  </span>
-                                </div>
-                              )}
-                              {symbol.symbol_meso_rate !== "0%" && (
-                                <div className="flex justify-between">
-                                  <span className="text-muted-foreground">
-                                    楓幣
-                                  </span>
-                                  <span className="text-yellow-300">
-                                    +{symbol.symbol_meso_rate}
-                                  </span>
-                                </div>
-                              )}
-                              {symbol.symbol_exp_rate !== "0%" && (
-                                <div className="flex justify-between">
-                                  <span className="text-muted-foreground">
-                                    經驗值
-                                  </span>
-                                  <span className="text-cyan-300">
-                                    +{symbol.symbol_exp_rate}
-                                  </span>
-                                </div>
-                              )}
-                            </div>
-                          )}
+                              <div className="border-t border-slate-600 pt-1 mt-2">
+                                {symbol.symbol_drop_rate !== "0%" && (
+                                  <div className="flex justify-between">
+                                    <span className="text-muted-foreground">
+                                      掉落率
+                                    </span>
+                                    <span className="text-purple-300">
+                                      +{symbol.symbol_drop_rate}
+                                    </span>
+                                  </div>
+                                )}
+                                {symbol.symbol_meso_rate !== "0%" && (
+                                  <div className="flex justify-between">
+                                    <span className="text-muted-foreground">
+                                      楓幣
+                                    </span>
+                                    <span className="text-yellow-300">
+                                      +{symbol.symbol_meso_rate}
+                                    </span>
+                                  </div>
+                                )}
+                                {symbol.symbol_exp_rate !== "0%" && (
+                                  <div className="flex justify-between">
+                                    <span className="text-muted-foreground">
+                                      經驗值
+                                    </span>
+                                    <span className="text-cyan-300">
+                                      +{symbol.symbol_exp_rate}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                            )}
 
                           {/* 成長進度 */}
                           {symbol.symbol_require_growth_count > 0 && (
@@ -219,15 +230,32 @@ export const CharacterSymbol: React.FC<CharacterSymbolProps> = ({
                                   成長進度
                                 </span>
                                 <span className="text-xs text-orange-300">
-                                  {symbol.symbol_growth_count}/
-                                  {symbol.symbol_require_growth_count}
+                                  {(() => {
+                                    // 如果符文是滿級且growth_count為0，顯示為滿級進度
+                                    const isMaxLevel = (symbol.symbol_level === 20 && symbol.symbol_name.includes('祕法符文')) ||
+                                      (symbol.symbol_level === 11 && symbol.symbol_name.includes('真實符文') && !symbol.symbol_name.includes('豪華'));
+
+                                    if (isMaxLevel && symbol.symbol_growth_count === 0) {
+                                      return `${symbol.symbol_require_growth_count}/${symbol.symbol_require_growth_count}`;
+                                    }
+                                    return `${symbol.symbol_growth_count}/${symbol.symbol_require_growth_count}`;
+                                  })()}
                                 </span>
                               </div>
                               <div className="w-full bg-slate-700 rounded-full h-1.5">
                                 <div
                                   className="bg-gradient-to-r from-orange-500 to-yellow-500 h-1.5 rounded-full transition-all duration-300"
                                   style={{
-                                    width: `${getProgressPercentage(symbol.symbol_growth_count, symbol.symbol_require_growth_count)}%`,
+                                    width: `${(() => {
+                                      // 如果符文是滿級且growth_count為0，顯示100%進度
+                                      const isMaxLevel = (symbol.symbol_level === 20 && symbol.symbol_name.includes('祕法符文')) ||
+                                        (symbol.symbol_level === 11 && symbol.symbol_name.includes('真實符文') && !symbol.symbol_name.includes('豪華'));
+
+                                      if (isMaxLevel && symbol.symbol_growth_count === 0) {
+                                        return 100;
+                                      }
+                                      return getProgressPercentage(symbol.symbol_growth_count, symbol.symbol_require_growth_count);
+                                    })()}%`,
                                   }}
                                 />
                               </div>
@@ -272,14 +300,59 @@ export const CharacterSymbol: React.FC<CharacterSymbolProps> = ({
               </div>
               <div className="text-sm text-muted-foreground">豪華符文</div>
             </div>
-            <div className="space-y-1">
-              <div className="text-2xl font-bold text-green-400">
-                {symbols.symbol
-                  .reduce((sum, s) => sum + parseInt(s.symbol_luk || "0"), 0)
-                  .toLocaleString("zh-TW")}
-              </div>
-              <div className="text-sm text-muted-foreground">總LUK</div>
-            </div>
+            {(() => {
+              // 計算所有符文的屬性總和
+              const totals = {
+                str: symbols.symbol.reduce((sum, s) => sum + parseInt(s.symbol_str || "0"), 0),
+                dex: symbols.symbol.reduce((sum, s) => sum + parseInt(s.symbol_dex || "0"), 0),
+                int: symbols.symbol.reduce((sum, s) => sum + parseInt(s.symbol_int || "0"), 0),
+                luk: symbols.symbol.reduce((sum, s) => sum + parseInt(s.symbol_luk || "0"), 0),
+                hp: symbols.symbol.reduce((sum, s) => sum + parseInt(s.symbol_hp || "0"), 0),
+              };
+
+              // 找出有數值的屬性
+              const activeStats = Object.entries(totals).filter(([_, value]) => value > 0);
+              
+              // 如果有多個屬性，顯示總屬性
+              if (activeStats.length > 1) {
+                return (
+                  <div className="space-y-1">
+                    <div className="text-2xl font-bold text-green-400">總屬性</div>
+                    <div className="text-xs text-muted-foreground space-y-1">
+                      {activeStats.map(([stat, value]) => (
+                        <div key={stat} className="flex justify-between">
+                          <span>{stat.toUpperCase()}:</span>
+                          <span className="text-green-300">+{value.toLocaleString("zh-TW")}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              }
+              
+              // 如果只有一個屬性，顯示該屬性的總和
+              if (activeStats.length === 1) {
+                const [statName, value] = activeStats[0];
+                return (
+                  <div className="space-y-1">
+                    <div className="text-2xl font-bold text-green-400">
+                      {value.toLocaleString("zh-TW")}
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      總{statName.toUpperCase()}
+                    </div>
+                  </div>
+                );
+              }
+              
+              // 如果沒有屬性加成，顯示0
+              return (
+                <div className="space-y-1">
+                  <div className="text-2xl font-bold text-gray-400">0</div>
+                  <div className="text-sm text-muted-foreground">無屬性加成</div>
+                </div>
+              );
+            })()}
           </div>
         </CardContent>
       </Card>
