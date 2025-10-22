@@ -6,6 +6,7 @@ import { CharacterProfile } from "@/components/CharacterProfile";
 import { CharacterStats } from "@/components/CharacterStats";
 import { CharacterSymbol } from "@/components/CharacterSymbol";
 import { CharacterHexa } from "@/components/CharacterHexa";
+import CharacterEquipment from "@/components/CharacterEquipment";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
     },
     enabled: !!searchedCharacter,
     staleTime: 1000 * 60 * 60, // 1小時內不重新獲取 OCID
+    retry: false, // 禁用自動重試
   });
 
   // 第二步：使用 OCID 獲取角色基本資訊
@@ -31,6 +33,7 @@ function App() {
       return await characterApi.getCharacterBasic(ocid!);
     },
     enabled: !!ocid,
+    retry: false, // 禁用自動重試
   });
 
   // 獲取角色能力值
@@ -40,6 +43,7 @@ function App() {
       return await characterApi.getCharacterStats(ocid!);
     },
     enabled: !!ocid,
+    retry: false, // 禁用自動重試
   });
 
   // 獲取符文資訊
@@ -49,6 +53,7 @@ function App() {
       return await characterApi.getCharacterSymbol(ocid!);
     },
     enabled: !!ocid,
+    retry: false, // 禁用自動重試
   });
 
   // 獲取 HEXA 核心
@@ -58,6 +63,7 @@ function App() {
       return await characterApi.getCharacterHexaCore(ocid!);
     },
     enabled: !!ocid,
+    retry: false, // 禁用自動重試
   });
 
   // 獲取 HEXA 屬性
@@ -67,6 +73,17 @@ function App() {
       return await characterApi.getCharacterHexaStat(ocid!);
     },
     enabled: !!ocid,
+    retry: false, // 禁用自動重試
+  });
+
+  // 獲取裝備資訊
+  const { data: equipmentData, isLoading: isLoadingEquipment } = useQuery({
+    queryKey: ["characterEquipment", ocid],
+    queryFn: async () => {
+      return await characterApi.getCharacterItemEquipment(ocid!);
+    },
+    enabled: !!ocid,
+    retry: false, // 禁用自動重試
   });
 
   const handleSearch = (characterName: string) => {
@@ -79,7 +96,8 @@ function App() {
     isLoadingStats ||
     isLoadingSymbol ||
     isLoadingHexaCore ||
-    isLoadingHexaStat;
+    isLoadingHexaStat ||
+    isLoadingEquipment;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 p-4">
@@ -107,12 +125,18 @@ function App() {
 
             {/* 分頁標籤系統 */}
             <Tabs defaultValue="stats" className="w-full max-w-6xl mx-auto">
-              <TabsList className="grid w-full grid-cols-3 bg-slate-800/50 h-12 p-1">
+              <TabsList className="grid w-full grid-cols-4 bg-slate-800/50 h-12 p-1">
                 <TabsTrigger
                   value="stats"
                   className="data-[state=active]:bg-blue-600 data-[state=active]:text-white text-sm font-medium transition-all duration-200 hover:bg-slate-700"
                 >
                   ⚔️ 能力值統計
+                </TabsTrigger>
+                <TabsTrigger
+                  value="equipment"
+                  className="data-[state=active]:bg-orange-600 data-[state=active]:text-white text-sm font-medium transition-all duration-200 hover:bg-slate-700"
+                >
+                  👕 角色裝備
                 </TabsTrigger>
                 <TabsTrigger
                   value="symbols"
@@ -130,6 +154,10 @@ function App() {
 
               <TabsContent value="stats" className="mt-6">
                 {statsData && <CharacterStats stats={statsData} />}
+              </TabsContent>
+
+              <TabsContent value="equipment" className="mt-6">
+                {equipmentData && <CharacterEquipment equipment={equipmentData} />}
               </TabsContent>
 
               <TabsContent value="symbols" className="mt-6">

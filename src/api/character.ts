@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CharacterBasic, CharacterStats, CharacterSymbol, CharacterHexaCore, CharacterHexaStat } from "@/types/character";
+import { CharacterBasic, CharacterStats, CharacterSymbol, CharacterHexaCore, CharacterHexaStat, CharacterItemEquipment } from "@/types/character";
 
 const apiKey = import.meta.env.VITE_NEXON_API_KEY;
 
@@ -49,6 +49,11 @@ export const characterApi = {
 
   getCharacterHexaStat: async (ocid: string): Promise<CharacterHexaStat> => {
     const response = await api.get(`/character/hexamatrix-stat?ocid=${ocid}`);
+    return response.data;
+  },
+
+  getCharacterItemEquipment: async (ocid: string): Promise<CharacterItemEquipment> => {
+    const response = await api.get(`/character/item-equipment?ocid=${ocid}`);
     return response.data;
   }
 };
