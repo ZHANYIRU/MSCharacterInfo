@@ -13,7 +13,7 @@ const getPotentialColor = (grade: string) => {
     case '罕見':
       return 'text-yellow-400';
     case '稀有':
-      return 'text-green-400';
+      return 'text-purple-400';
     case '特殊':
       return 'text-blue-400';
     default:
@@ -521,7 +521,7 @@ const CharacterEquipment: React.FC<CharacterEquipmentProps> = ({ equipment }) =>
           <div className="space-y-3">
             {renderEquipmentSlot('帽子', '帽子')}
             {renderEquipmentSlot('上衣', '上衣')}
-            {renderEquipmentSlot('褲/裙', '下裝')}
+            {renderEquipmentSlot('褲/裙', '褲/裙')}
             {renderEquipmentSlot('肩膀裝飾', '肩飾')}
           </div>
           {/* 右排 */}
