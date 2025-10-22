@@ -1,0 +1,39 @@
+{
+  "parser": "@babel/eslint-parser",
+  "plugins": ["cypress", "react-hooks", "react"],
+  "extends": ["plugin:react/recommended"],
+  "env": {
+    "cypress/globals": true,
+    "node": true,
+    "browser": true,
+    "es6": true
+  },
+  "rules": {
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "no-undef": "error",
+    "no-unused-vars": "warn",
+    "react/jsx-uses-vars": "error",
+    "react/jsx-uses-react": "error",
+    "react/prop-types": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-key": "off",
+    "react/display-name": "off",
+    "react/no-unknown-property": "off",
+    "react/no-children-prop": "off"
+  },
+  "parserOptions": {
+    "requireConfigFile": false,
+    "babelOptions": {
+      "presets": ["@babel/preset-react"]
+    },
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
+}
