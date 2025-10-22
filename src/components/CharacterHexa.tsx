@@ -12,6 +12,41 @@ export const CharacterHexa: React.FC<CharacterHexaProps> = ({
   hexaCore,
   hexaStat,
 }) => {
+  // 檢查是否有六轉技能
+  const hasHexaCore = hexaCore?.character_hexa_core_equipment && hexaCore.character_hexa_core_equipment.length > 0;
+  
+  // 如果沒有六轉技能，顯示提示訊息
+  if (!hasHexaCore) {
+    return (
+      <div className="w-full max-w-6xl mx-auto space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-center text-2xl text-cyan-400 flex items-center justify-center space-x-2">
+              <Hexagon className="w-6 h-6" />
+              <span>HEXA 六轉技能系統</span>
+            </CardTitle>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-gray-500/30 bg-gray-950/20">
+          <CardContent className="p-12">
+            <div className="text-center space-y-4">
+              <Hexagon className="w-16 h-16 text-gray-400 mx-auto" />
+              <div className="space-y-2">
+                <h3 className="text-xl font-semibold text-gray-300">尚未六轉</h3>
+                <p className="text-gray-400">
+                  此角色尚未進行六轉，無法查看 HEXA 技能資訊
+                </p>
+                <p className="text-sm text-gray-500">
+                  需要達到 260 等級並完成六轉任務才能使用 HEXA 系統
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
   // 共用核心升級材料表 (累積需求)
   const commonCoreRequirements = [
     { level: 1, souls: 7, fragments: 125 },
@@ -231,13 +266,13 @@ export const CharacterHexa: React.FC<CharacterHexaProps> = ({
 
   // 獲取活躍的 HEXA 屬性核心，並標記來源
   const activeHexaStats = [
-    ...hexaStat.character_hexa_stat_core
+    ...(hexaStat.character_hexa_stat_core || [])
       .filter((stat) => stat.stat_grade > 0)
       .map((stat) => ({ ...stat, coreGroup: 1 })),
-    ...hexaStat.character_hexa_stat_core_2
+    ...(hexaStat.character_hexa_stat_core_2 || [])
       .filter((stat) => stat.stat_grade > 0)
       .map((stat) => ({ ...stat, coreGroup: 2 })),
-    ...hexaStat.character_hexa_stat_core_3
+    ...(hexaStat.character_hexa_stat_core_3 || [])
       .filter((stat) => stat.stat_grade > 0)
       .map((stat) => ({ ...stat, coreGroup: 3 })),
   ];
