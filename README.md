@@ -33,8 +33,12 @@ npm install
 ```
 
 2. 設定 API Key：
-   - 編輯 `src/api/character.ts`
-   - 將 `YOUR_API_KEY_HERE` 替換為你的楓之谷 API Key
+   - 複製 `.env.example` 為 `.env`
+   - 在 `.env` 文件中設定你的楓之谷 API Key：
+     ```
+     VITE_NEXON_API_KEY=your_actual_api_key_here
+     ```
+   - 前往 [Nexon Open API](https://openapi.nexon.com/) 申請 API Key
 
 3. 啟動開發伺服器：
 ```bash
@@ -51,6 +55,37 @@ npm run build
 npm run format        # 格式化所有文件
 npm run format:check  # 檢查格式化狀態
 ```
+
+## 部署到 GitHub Pages
+
+### 自動部署（推薦）
+1. **設定 GitHub Secrets**：
+   - 進入 GitHub 儲存庫設定
+   - 找到 "Secrets and variables" → "Actions"
+   - 點擊 "New repository secret"
+   - Name: `VITE_NEXON_API_KEY`
+   - Secret: 你的楓之谷 API Key
+   - 點擊 "Add secret"
+
+2. **啟用 GitHub Pages**：
+   - 在儲存庫設定中找到 "Pages" 選項
+   - Source 選擇 "Deploy from a branch"
+   - Branch 選擇 "gh-pages"
+   - 點擊 Save
+
+3. **自動部署**：
+   - 將代碼推送到 GitHub 儲存庫的 `main` 分支
+   - GitHub Actions 會自動建構並部署到 GitHub Pages
+   - 查看 Actions 頁面確認部署狀態
+
+### 手動部署
+```bash
+npm run deploy
+```
+
+### 訪問網站
+部署完成後，可以通過以下網址訪問：
+`https://[你的用戶名].github.io/MSCharacterInfo/`
 
 ## API 設定
 

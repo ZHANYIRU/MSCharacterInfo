@@ -1,10 +1,16 @@
 import axios from "axios";
 import { CharacterBasic, CharacterStats, CharacterSymbol, CharacterHexaCore, CharacterHexaStat } from "@/types/character";
 
+const apiKey = import.meta.env.VITE_NEXON_API_KEY;
+
+if (!apiKey) {
+  console.warn("VITE_NEXON_API_KEY 環境變數未設定，API 調用可能會失敗");
+}
+
 const api = axios.create({
   baseURL: "https://open.api.nexon.com/maplestorytw/v1",
   headers: {
-    "x-nxopen-api-key": "test_3b58da8904abf294fdcd7ab94e7fbcb568d6c21754facb150679d8b30d7017c7efe8d04e6d233bd35cf2fabdeb93fb0d",
+    "x-nxopen-api-key": apiKey || "",
   },
 });
 
