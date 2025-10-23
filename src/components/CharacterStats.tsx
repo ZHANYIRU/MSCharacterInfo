@@ -110,14 +110,14 @@ export const CharacterStats: React.FC<CharacterStatsProps> = ({ stats }) => {
       {/* 戰鬥力顯示區塊 */}
       <Card className="border-yellow-500/50 bg-gradient-to-r from-yellow-950/30 to-orange-950/30">
         <CardContent className="p-6">
-          <div className="flex items-center justify-center space-x-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4">
             <div className="flex items-center space-x-2">
               <Trophy className="w-8 h-8 text-yellow-400" />
               <span className="text-xl font-semibold text-yellow-400">
                 戰鬥力
               </span>
             </div>
-            <div className="text-3xl font-bold text-yellow-300">
+            <div className="text-2xl sm:text-3xl font-bold text-yellow-300">
               {formatPowerValue(battlePower)}
             </div>
           </div>

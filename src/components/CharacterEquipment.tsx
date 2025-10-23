@@ -1,5 +1,6 @@
 import React from 'react';
 import { CharacterItemEquipment, ItemEquipment } from '../types/character';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 interface CharacterEquipmentProps {
   equipment: CharacterItemEquipment | null;
@@ -134,7 +135,7 @@ const EquipmentTooltip: React.FC<{ item: ItemEquipment }> = ({ item }) => {
   const shouldShowStarforce = !isSpecialRing || !isRing;
 
   return (
-    <div className="absolute z-50 bg-gray-900/95 border border-yellow-500/50 rounded-lg p-4 shadow-2xl min-w-80 max-w-96 backdrop-blur-sm">
+    <div className="md:absolute z-50 bg-gray-900/95 border border-yellow-500/50 rounded-lg p-4 shadow-2xl min-w-80 max-w-96 backdrop-blur-sm">
       {shouldShowStarforce && <StarforceDisplay starforce={item.starforce} itemSlot={item.item_equipment_slot} />}
       
       {/* 特殊戒指等級顯示 */}
@@ -376,18 +377,42 @@ const EquipmentTooltip: React.FC<{ item: ItemEquipment }> = ({ item }) => {
 const EquipmentItem: React.FC<{ item: ItemEquipment }> = ({ item }) => {
   const [showTooltip, setShowTooltip] = React.useState(false);
   const [tooltipPosition, setTooltipPosition] = React.useState({ x: 0, y: 0 });
+  const [showDialog, setShowDialog] = React.useState(false);
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const handleMouseEnter = (e: React.MouseEvent) => {
-    setShowTooltip(true);
-    setTooltipPosition({ x: e.clientX, y: e.clientY });
+    if (!isMobile) {
+      setShowTooltip(true);
+      setTooltipPosition({ x: e.clientX, y: e.clientY });
+    }
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    setTooltipPosition({ x: e.clientX, y: e.clientY });
+    if (!isMobile) {
+      setTooltipPosition({ x: e.clientX, y: e.clientY });
+    }
   };
 
   const handleMouseLeave = () => {
-    setShowTooltip(false);
+    if (!isMobile) {
+      setShowTooltip(false);
+    }
+  };
+
+  const handleClick = () => {
+    if (isMobile) {
+      setShowDialog(true);
+    }
   };
 
   // 檢查是否為特殊戒指
@@ -395,40 +420,59 @@ const EquipmentItem: React.FC<{ item: ItemEquipment }> = ({ item }) => {
   const isRing = item.item_equipment_slot.includes('戒指');
 
   return (
-    <div className="relative">
-      <div
-        className="w-16 h-16 bg-gray-800 border-2 border-blue-400 rounded-lg flex items-center justify-center cursor-pointer hover:border-blue-300 transition-colors relative"
-        onMouseEnter={handleMouseEnter}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-      >
-        <img
-          src={item.item_icon}
-          alt={item.item_name}
-          className="w-12 h-12 object-contain"
-        />
+    <>
+      <div className="relative">
+        <div
+          className="w-12 h-12 sm:w-16 sm:h-16 bg-gray-800 border-2 border-blue-400 rounded-lg flex items-center justify-center cursor-pointer hover:border-blue-300 transition-colors relative"
+          onMouseEnter={handleMouseEnter}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+          onClick={handleClick}
+        >
+          <img
+            src={item.item_icon}
+            alt={item.item_name}
+            className="w-8 h-8 sm:w-12 sm:h-12 object-contain"
+          />
+          
+          {/* 特殊戒指等級顯示 */}
+          {isSpecialRing && isRing && (
+            <div className="absolute bottom-1 right-1 bg-purple-600 text-white text-xs font-bold rounded px-1 min-w-4 text-center">
+              {item.special_ring_level}
+            </div>
+          )}
+        </div>
         
-        {/* 特殊戒指等級顯示 */}
-        {isSpecialRing && isRing && (
-          <div className="absolute bottom-1 right-1 bg-purple-600 text-white text-xs font-bold rounded px-1 min-w-4 text-center">
-            {item.special_ring_level}
+        {/* 桌面版 Tooltip */}
+        {showTooltip && !isMobile && (
+          <div
+            style={{
+              position: 'fixed',
+              left: tooltipPosition.x + 10,
+              bottom: window.innerHeight - tooltipPosition.y + 450,
+              zIndex: 1000,
+            }}
+          >
+            <EquipmentTooltip item={item} />
           </div>
         )}
       </div>
-      
-      {showTooltip && (
-        <div
-          style={{
-            position: 'fixed',
-            left: tooltipPosition.x + 10,
-            bottom: window.innerHeight - tooltipPosition.y + 450,
-            zIndex: 1000,
-          }}
-        >
-          <EquipmentTooltip item={item} />
-        </div>
-      )}
-    </div>
+
+      {/* 手機版 Dialog */}
+      <Dialog open={showDialog} onOpenChange={setShowDialog}>
+        <DialogContent className="max-w-sm mx-auto max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-white">
+              <img src={item.item_icon} alt={item.item_name} className="w-8 h-8" />
+              {item.item_name}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="mt-4">
+            <EquipmentTooltip item={item} />
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 
@@ -495,7 +539,8 @@ const CharacterEquipment: React.FC<CharacterEquipmentProps> = ({ equipment }) =>
         <p className="text-gray-300 text-sm">滑鼠移到裝備上查看詳細資訊</p>
       </div>
 
-      <div className="grid grid-cols-12 gap-4 max-w-6xl mx-auto">
+      {/* 桌面版佈局 */}
+      <div className="hidden sm:grid grid-cols-12 gap-2 sm:gap-4 max-w-6xl mx-auto">
         {/* 左側裝備欄 - 兩排 */}
         <div className="col-span-3 grid grid-cols-2 gap-3">
           {/* 左排 */}
@@ -549,6 +594,65 @@ const CharacterEquipment: React.FC<CharacterEquipmentProps> = ({ equipment }) =>
             {renderEquipmentSlot('鞋子', '鞋子')}
             {renderEquipmentSlot('胸章', '胸章')}
           </div>
+        </div>
+      </div>
+
+      {/* 手機版佈局 */}
+      <div className="sm:hidden space-y-4">
+        {/* 第一排：帽子、臉飾、眼飾 */}
+        <div className="flex justify-center gap-2">
+          {renderEquipmentSlot('帽子', '帽子')}
+          {renderEquipmentSlot('臉飾', '臉飾')}
+          {renderEquipmentSlot('眼飾', '眼飾')}
+        </div>
+        
+        {/* 第二排：耳環、上衣、披風 */}
+        <div className="flex justify-center gap-2">
+          {renderEquipmentSlot('耳環', '耳環')}
+          {renderEquipmentSlot('上衣', '上衣')}
+          {renderEquipmentSlot('披風', '披風')}
+        </div>
+        
+        {/* 第三排：墜飾2、褲/裙、手套 */}
+        <div className="flex justify-center gap-2">
+          {renderEquipmentSlot('墜飾2', '墜飾2')}
+          {renderEquipmentSlot('褲/裙', '褲/裙')}
+          {renderEquipmentSlot('手套', '手套')}
+        </div>
+        
+        {/* 第四排：墜飾、肩飾、鞋子 */}
+        <div className="flex justify-center gap-2">
+          {renderEquipmentSlot('墜飾', '墜飾')}
+          {renderEquipmentSlot('肩膀裝飾', '肩飾')}
+          {renderEquipmentSlot('鞋子', '鞋子')}
+        </div>
+        
+        {/* 第五排：武器、輔助武器、徽章 */}
+        <div className="flex justify-center gap-2">
+          {renderEquipmentSlot('武器', '武器')}
+          {renderEquipmentSlot('輔助武器', '副手')}
+          {renderEquipmentSlot('徽章', '徽章')}
+        </div>
+        
+        {/* 第六排：戒指1、戒指2、戒指3 */}
+        <div className="flex justify-center gap-2">
+          {renderEquipmentSlot('戒指1', '戒指')}
+          {renderEquipmentSlot('戒指2', '戒指2')}
+          {renderEquipmentSlot('戒指3', '戒指3')}
+        </div>
+        
+        {/* 第七排：戒指4、腰帶、胸章 */}
+        <div className="flex justify-center gap-2">
+          {renderEquipmentSlot('戒指4', '戒指4')}
+          {renderEquipmentSlot('腰帶', '腰帶')}
+          {renderEquipmentSlot('胸章', '胸章')}
+        </div>
+        
+        {/* 第八排：口袋道具、勳章、機器心臟 */}
+        <div className="flex justify-center gap-2">
+          {renderEquipmentSlot('口袋道具', '口袋')}
+          {renderEquipmentSlot('勳章', '勳章')}
+          {renderEquipmentSlot('機器心臟', '機器心臟')}
         </div>
       </div>
 

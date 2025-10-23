@@ -103,13 +103,13 @@ function App() {
     isLoadingUnion;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 p-4">
-      <div className="container mx-auto space-y-8">
-        <div className="text-center py-8">
-          <h1 className="text-4xl font-bold text-white mb-2">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 p-2 sm:p-4">
+      <div className="container mx-auto space-y-4 sm:space-y-8 max-w-7xl px-2 sm:px-4">
+        <div className="text-center py-4 sm:py-8">
+          <h1 className="text-2xl sm:text-4xl font-bold text-white mb-2">
             楓之谷角色搜尋系統
           </h1>
-          <p className="text-blue-300">查詢角色詳細資訊與能力值</p>
+          <p className="text-blue-300 text-sm sm:text-base">查詢角色詳細資訊與能力值</p>
         </div>
 
         <CharacterSearch onSearch={handleSearch} isLoading={isLoading} />
@@ -143,7 +143,7 @@ function App() {
                 } 
                 className="w-full max-w-6xl mx-auto"
               >
-              <TabsList className="grid w-full grid-cols-4 bg-slate-800/50 h-12 p-1">
+              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 bg-slate-800/50 h-auto sm:h-12 p-1 gap-1">
                 <TabsTrigger
                   value="stats"
                   disabled={!statsData}
@@ -153,7 +153,8 @@ function App() {
                       : 'data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-slate-700'
                   }`}
                 >
-                  ⚔️ 能力值統計
+                  <span className="hidden sm:inline">⚔️ 能力值統計</span>
+                  <span className="sm:hidden">⚔️ 能力值</span>
                 </TabsTrigger>
                 <TabsTrigger
                   value="equipment"
@@ -164,7 +165,8 @@ function App() {
                       : 'data-[state=active]:bg-orange-600 data-[state=active]:text-white hover:bg-slate-700'
                   }`}
                 >
-                  👕 角色裝備
+                  <span className="hidden sm:inline">👕 角色裝備</span>
+                  <span className="sm:hidden">👕 裝備</span>
                 </TabsTrigger>
                 <TabsTrigger
                   value="symbols"
@@ -175,7 +177,8 @@ function App() {
                       : 'data-[state=active]:bg-purple-600 data-[state=active]:text-white hover:bg-slate-700'
                   }`}
                 >
-                  🔮 符文系統
+                  <span className="hidden sm:inline">🔮 符文系統</span>
+                  <span className="sm:hidden">🔮 符文</span>
                 </TabsTrigger>
                 <TabsTrigger
                   value="hexa"
@@ -186,7 +189,8 @@ function App() {
                       : 'data-[state=active]:bg-cyan-600 data-[state=active]:text-white hover:bg-slate-700'
                   }`}
                 >
-                  🌟 HEXA 六轉
+                  <span className="hidden sm:inline">🌟 HEXA 六轉</span>
+                  <span className="sm:hidden">🌟 HEXA</span>
                 </TabsTrigger>
               </TabsList>
 
