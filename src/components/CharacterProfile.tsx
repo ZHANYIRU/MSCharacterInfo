@@ -1,14 +1,16 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CharacterBasic } from "@/types/character";
+import { CharacterBasic, CharacterUnion } from "@/types/character";
 import { Calendar, Users, Trophy, Star } from "lucide-react";
 
 interface CharacterProfileProps {
   character: CharacterBasic;
+  union?: CharacterUnion | null;
 }
 
 export const CharacterProfile: React.FC<CharacterProfileProps> = ({
   character,
+  union,
 }) => {
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("zh-TW");
@@ -28,14 +30,34 @@ export const CharacterProfile: React.FC<CharacterProfileProps> = ({
       <CardContent>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* 角色圖片 */}
-          <div className="lg:col-span-1 flex justify-center">
-            <div className="relative">
+          <div className="lg:col-span-1 flex flex-col items-center space-y-4 justify-between">
+            <div className="relative flex-1">
               <img
                 src={character.character_image}
                 alt={character.character_name}
                 className="max-w-full h-auto rounded-lg border-2 border-blue-500/30"
               />
             </div>
+            
+            {/* 戰地聯盟資訊 - 簡潔樣式 */}
+            {union && (
+              <div className="bg-slate-800/30 rounded-lg p-3 w-full max-w-xs">
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-300">戰地等級</span>
+                    <span className="text-white font-medium">{formatNumber(union.union_level)}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-300">戰地階級</span>
+                    <span className="text-white font-medium">{union.union_grade}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-300">神器等級</span>
+                    <span className="text-white font-medium">{union.union_artifact_level}</span>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* 基本資訊 */}
@@ -134,6 +156,8 @@ export const CharacterProfile: React.FC<CharacterProfileProps> = ({
                   </div>
                 </CardContent>
               </Card>
+
+
             </div>
           </div>
         </div>

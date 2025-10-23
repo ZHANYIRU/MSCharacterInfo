@@ -163,3 +163,12 @@ export interface CharacterItemEquipment {
   item_equipment_preset_2: ItemEquipment[];
   item_equipment_preset_3: ItemEquipment[];
 }
+
+export interface CharacterUnion {
+  date: string | null;
+  union_level: number;
+  union_grade: string;
+  union_artifact_level: number;
+  union_artifact_exp: number;
+  union_artifact_point: number;
+}

@@ -79,6 +79,15 @@ function App() {
     enabled: !!ocid,
   });
 
+  // 獲取戰地聯盟資訊
+  const { data: unionData, isLoading: isLoadingUnion } = useQuery({
+    queryKey: ["characterUnion", ocid],
+    queryFn: async () => {
+      return await characterApi.getCharacterUnion(ocid!);
+    },
+    enabled: !!ocid,
+  });
+
   const handleSearch = (characterName: string) => {
     setSearchedCharacter(characterName);
   };
@@ -90,7 +99,8 @@ function App() {
     isLoadingSymbol ||
     isLoadingHexaCore ||
     isLoadingHexaStat ||
-    isLoadingEquipment;
+    isLoadingEquipment ||
+    isLoadingUnion;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 p-4">
@@ -114,10 +124,10 @@ function App() {
         {characterData && (
           <div className="space-y-8">
             {/* 角色基本資訊始終顯示在頂部 */}
-            <CharacterProfile character={characterData} />
+            <CharacterProfile character={characterData} union={unionData} />
 
             {/* 檢查是否還在載入其他資料 */}
-            {isLoadingStats || isLoadingEquipment || isLoadingSymbol || isLoadingHexaCore || isLoadingHexaStat ? (
+            {isLoadingStats || isLoadingEquipment || isLoadingSymbol || isLoadingHexaCore || isLoadingHexaStat || isLoadingUnion ? (
               <div className="text-center py-16">
                 <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400 mb-4"></div>
                 <p className="text-blue-300 text-lg">載入角色詳細資料中...</p>
