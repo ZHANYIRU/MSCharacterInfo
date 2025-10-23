@@ -159,4 +159,7 @@ export interface CharacterItemEquipment {
   character_class: string;
   preset_no: number;
   item_equipment: ItemEquipment[];
+  item_equipment_preset_1: ItemEquipment[];
+  item_equipment_preset_2: ItemEquipment[];
+  item_equipment_preset_3: ItemEquipment[];
 }

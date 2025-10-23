@@ -433,6 +433,8 @@ const EquipmentItem: React.FC<{ item: ItemEquipment }> = ({ item }) => {
 };
 
 const CharacterEquipment: React.FC<CharacterEquipmentProps> = ({ equipment }) => {
+  const [activePreset, setActivePreset] = React.useState<'current' | 'preset1' | 'preset2' | 'preset3'>('current');
+
   if (!equipment || !equipment.item_equipment) {
     return (
       <div className="text-center py-8">
@@ -441,8 +443,24 @@ const CharacterEquipment: React.FC<CharacterEquipmentProps> = ({ equipment }) =>
     );
   }
 
+  // 根據選擇的預設獲取裝備列表
+  const getCurrentEquipment = () => {
+    switch (activePreset) {
+      case 'preset1':
+        return equipment.item_equipment_preset_1 || [];
+      case 'preset2':
+        return equipment.item_equipment_preset_2 || [];
+      case 'preset3':
+        return equipment.item_equipment_preset_3 || [];
+      default:
+        return equipment.item_equipment || [];
+    }
+  };
+
+  const currentEquipment = getCurrentEquipment();
+
   // 將裝備按部位分組
-  const equipmentBySlot = equipment.item_equipment.reduce((acc, item) => {
+  const equipmentBySlot = currentEquipment.reduce((acc, item) => {
     acc[item.item_equipment_slot] = item;
     return acc;
   }, {} as Record<string, ItemEquipment>);
@@ -531,6 +549,52 @@ const CharacterEquipment: React.FC<CharacterEquipmentProps> = ({ equipment }) =>
             {renderEquipmentSlot('鞋子', '鞋子')}
             {renderEquipmentSlot('胸章', '胸章')}
           </div>
+        </div>
+      </div>
+
+      {/* 裝備預設切換 */}
+      <div className="flex justify-center mt-6">
+        <div className="flex bg-slate-800/50 rounded-lg p-1 border border-slate-600/50">
+          <button
+            onClick={() => setActivePreset('current')}
+            className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+              activePreset === 'current'
+                ? 'bg-blue-600 text-white shadow-md'
+                : 'text-gray-300 hover:text-white hover:bg-slate-700/50'
+            }`}
+          >
+            當前套用
+          </button>
+          <button
+            onClick={() => setActivePreset('preset1')}
+            className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+              activePreset === 'preset1'
+                ? 'bg-blue-600 text-white shadow-md'
+                : 'text-gray-300 hover:text-white hover:bg-slate-700/50'
+            }`}
+          >
+            裝備1
+          </button>
+          <button
+            onClick={() => setActivePreset('preset2')}
+            className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+              activePreset === 'preset2'
+                ? 'bg-blue-600 text-white shadow-md'
+                : 'text-gray-300 hover:text-white hover:bg-slate-700/50'
+            }`}
+          >
+            裝備2
+          </button>
+          <button
+            onClick={() => setActivePreset('preset3')}
+            className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+              activePreset === 'preset3'
+                ? 'bg-blue-600 text-white shadow-md'
+                : 'text-gray-300 hover:text-white hover:bg-slate-700/50'
+            }`}
+          >
+            裝備3
+          </button>
         </div>
       </div>
     </div>

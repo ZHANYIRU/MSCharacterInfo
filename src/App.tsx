@@ -23,7 +23,6 @@ function App() {
     },
     enabled: !!searchedCharacter,
     staleTime: 1000 * 60 * 60, // 1小時內不重新獲取 OCID
-    retry: false, // 禁用自動重試
   });
 
   // 第二步：使用 OCID 獲取角色基本資訊
@@ -33,7 +32,6 @@ function App() {
       return await characterApi.getCharacterBasic(ocid!);
     },
     enabled: !!ocid,
-    retry: false, // 禁用自動重試
   });
 
   // 獲取角色能力值
@@ -43,7 +41,6 @@ function App() {
       return await characterApi.getCharacterStats(ocid!);
     },
     enabled: !!ocid,
-    retry: false, // 禁用自動重試
   });
 
   // 獲取符文資訊
@@ -53,7 +50,6 @@ function App() {
       return await characterApi.getCharacterSymbol(ocid!);
     },
     enabled: !!ocid,
-    retry: false, // 禁用自動重試
   });
 
   // 獲取 HEXA 核心
@@ -63,7 +59,6 @@ function App() {
       return await characterApi.getCharacterHexaCore(ocid!);
     },
     enabled: !!ocid,
-    retry: false, // 禁用自動重試
   });
 
   // 獲取 HEXA 屬性
@@ -73,7 +68,6 @@ function App() {
       return await characterApi.getCharacterHexaStat(ocid!);
     },
     enabled: !!ocid,
-    retry: false, // 禁用自動重試
   });
 
   // 獲取裝備資訊
@@ -83,7 +77,6 @@ function App() {
       return await characterApi.getCharacterItemEquipment(ocid!);
     },
     enabled: !!ocid,
-    retry: false, // 禁用自動重試
   });
 
   const handleSearch = (characterName: string) => {
@@ -118,61 +111,119 @@ function App() {
           </div>
         )}
 
-        {characterData && !isLoading && (
+        {characterData && (
           <div className="space-y-8">
             {/* 角色基本資訊始終顯示在頂部 */}
             <CharacterProfile character={characterData} />
 
-            {/* 分頁標籤系統 */}
-            <Tabs defaultValue="stats" className="w-full max-w-6xl mx-auto">
+            {/* 檢查是否還在載入其他資料 */}
+            {isLoadingStats || isLoadingEquipment || isLoadingSymbol || isLoadingHexaCore || isLoadingHexaStat ? (
+              <div className="text-center py-16">
+                <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400 mb-4"></div>
+                <p className="text-blue-300 text-lg">載入角色詳細資料中...</p>
+              </div>
+            ) : (
+              /* 分頁標籤系統 */
+              <Tabs 
+                defaultValue={
+                  statsData ? "stats" : 
+                  equipmentData ? "equipment" : 
+                  symbolData ? "symbols" : 
+                  (hexaCoreData && hexaStatData) ? "hexa" : "stats"
+                } 
+                className="w-full max-w-6xl mx-auto"
+              >
               <TabsList className="grid w-full grid-cols-4 bg-slate-800/50 h-12 p-1">
                 <TabsTrigger
                   value="stats"
-                  className="data-[state=active]:bg-blue-600 data-[state=active]:text-white text-sm font-medium transition-all duration-200 hover:bg-slate-700"
+                  disabled={!statsData}
+                  className={`text-sm font-medium transition-all duration-200 ${
+                    !statsData 
+                      ? 'text-gray-500 cursor-not-allowed' 
+                      : 'data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-slate-700'
+                  }`}
                 >
                   ⚔️ 能力值統計
                 </TabsTrigger>
                 <TabsTrigger
                   value="equipment"
-                  className="data-[state=active]:bg-orange-600 data-[state=active]:text-white text-sm font-medium transition-all duration-200 hover:bg-slate-700"
+                  disabled={!equipmentData}
+                  className={`text-sm font-medium transition-all duration-200 ${
+                    !equipmentData 
+                      ? 'text-gray-500 cursor-not-allowed' 
+                      : 'data-[state=active]:bg-orange-600 data-[state=active]:text-white hover:bg-slate-700'
+                  }`}
                 >
                   👕 角色裝備
                 </TabsTrigger>
                 <TabsTrigger
                   value="symbols"
-                  className="data-[state=active]:bg-purple-600 data-[state=active]:text-white text-sm font-medium transition-all duration-200 hover:bg-slate-700"
+                  disabled={!symbolData}
+                  className={`text-sm font-medium transition-all duration-200 ${
+                    !symbolData 
+                      ? 'text-gray-500 cursor-not-allowed' 
+                      : 'data-[state=active]:bg-purple-600 data-[state=active]:text-white hover:bg-slate-700'
+                  }`}
                 >
                   🔮 符文系統
                 </TabsTrigger>
                 <TabsTrigger
                   value="hexa"
-                  className="data-[state=active]:bg-cyan-600 data-[state=active]:text-white text-sm font-medium transition-all duration-200 hover:bg-slate-700"
+                  disabled={!hexaCoreData || !hexaStatData}
+                  className={`text-sm font-medium transition-all duration-200 ${
+                    !hexaCoreData || !hexaStatData 
+                      ? 'text-gray-500 cursor-not-allowed' 
+                      : 'data-[state=active]:bg-cyan-600 data-[state=active]:text-white hover:bg-slate-700'
+                  }`}
                 >
                   🌟 HEXA 六轉
                 </TabsTrigger>
               </TabsList>
 
               <TabsContent value="stats" className="mt-6">
-                {statsData && <CharacterStats stats={statsData} />}
+                {statsData ? (
+                  <CharacterStats stats={statsData} />
+                ) : (
+                  <div className="text-center py-8">
+                    <p className="text-gray-400">無能力值資料</p>
+                  </div>
+                )}
               </TabsContent>
 
               <TabsContent value="equipment" className="mt-6">
-                {equipmentData && <CharacterEquipment equipment={equipmentData} />}
+                {equipmentData ? (
+                  <CharacterEquipment equipment={equipmentData} />
+                ) : (
+                  <div className="text-center py-8">
+                    <p className="text-gray-400">無裝備資料</p>
+                  </div>
+                )}
               </TabsContent>
 
               <TabsContent value="symbols" className="mt-6">
-                {symbolData && <CharacterSymbol symbols={symbolData} />}
+                {symbolData ? (
+                  <CharacterSymbol symbols={symbolData} />
+                ) : (
+                  <div className="text-center py-8">
+                    <p className="text-gray-400">無符文資料</p>
+                  </div>
+                )}
               </TabsContent>
 
               <TabsContent value="hexa" className="mt-6">
-                {hexaCoreData && hexaStatData && (
+                {hexaCoreData && hexaStatData ? (
                   <CharacterHexa
                     hexaCore={hexaCoreData}
                     hexaStat={hexaStatData}
                   />
+                ) : (
+                  <div className="text-center py-8">
+                    <p className="text-gray-400">無HEXA資料</p>
+                  </div>
                 )}
               </TabsContent>
             </Tabs>
+            )}
           </div>
         )}
 
